@@ -1,3 +1,6 @@
+## This py file is for python algorithm practice and tips
+## Based on Dongbin Na's remarkable free youtube lecture
+
 # Use PyPy if possible it much faster
 # s: 1 n: 2k -> o(n^2) // s: 1 n: 100k -> o(nlogn)
 
