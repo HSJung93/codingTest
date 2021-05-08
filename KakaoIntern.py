@@ -31,6 +31,15 @@ def solution(s):
     return min(length)
 
 
+############# Difference of Strings in List
+
+for word_2_idx in range(len(words)-1, -1, -1):
+    word_2 = words[word_2_idx]
+    difference = sum([x != y for x, y in zip(word_1, word_2)])
+    # 차이가 1이면
+    if difference == 1:
+        tmp_q.append(words.pop(word_2_idx))
+
 ############# Greedy
 
 def change(i):
