@@ -132,7 +132,7 @@ def solution(p):
         return "(" + solution(v) + ")" + flip(u[1:-1])
   
   
-############# DFS
+############# BFS
 
 import math
 from collections import deque
