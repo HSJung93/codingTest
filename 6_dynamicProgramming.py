@@ -99,3 +99,54 @@ for i in range(1, n):
             d[i] = max(dp[i], dp[j]+1)
 
 print(n-max(dp))
+
+# gridTraveler
+# 메모가 없는 버전에서 1. 재귀 처음에서 메모 값이 없을 경우 채워 넣는다. 2. 리턴 위에서 메모 값으로 계산
+def gridTraveler(m, n, memo):
+    if memo[m][n] != -1: 
+        return memo[m][n]
+    if m == 1 and n == 1: 
+        return 1
+    if m == 0 or n == 0: 
+        return 0
+    memo[m][n] = gridTraveler(m-1, n, memo) + gridTraveler(m, n-1, memo)
+    return memo[m][n]
+
+m, n = 30, 30
+
+memo = [[-1 for _ in range(n+1)] for _ in range(m+1)]
+
+print(gridTraveler(m, n, memo))
+
+#canSum
+#메모 빈 defaultdict을 전달하는것도 상당히 편리
+from collections import defaultdict
+
+def canSum(target, num_list, memo):
+    if target in memo: return memo[target]
+    if target == 0: return True
+    if target <0: return False
+    
+    for num in num_list:
+        remainder = target - num
+        if canSum(remainder, num_list, memo):
+            memo[target] = True
+            return True
+        
+    memo[target] = False
+    return False
+
+memo = defaultdict(bool)
+print(canSum(7, [2, 3], memo))
+memo = defaultdict(bool)
+print(canSum(7, [5, 3, 4, 7], memo))
+memo = defaultdict(bool)
+print(canSum(7, [2, 4], memo))
+memo = defaultdict(bool)
+print(canSum(8, [2, 3, 5], memo))
+memo = defaultdict(bool)
+print(canSum(300, [7, 14], memo))
+
+#howSum
+def howSum(target, num_list, memo):
+    return 
