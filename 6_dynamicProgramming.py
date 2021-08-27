@@ -211,3 +211,32 @@ memo = defaultdict(bool)
 print(bestSum(8, [2, 3, 5], memo))
 memo = defaultdict(bool)
 print(bestSum(300, [7, 14], memo))
+
+#canConstruct
+from collections import defaultdict
+
+def canConstruct(target, wordBank, memo):
+    if target in memo: return memo[target]
+    if target == "": return True
+
+    for word in wordBank:
+        if target.find(word) == 0:
+            suffix = target[len(word):]
+            if canConstruct(suffix, wordBank, memo) == True:
+                memo[target] = True
+                # 이곳에서 memo[target]를 리턴할 필요는 없다. 재귀 차원에 들어갔을 때에 메모를 확인하고, 값이 나왔을 때 저장하는 것이 메모이제이션이다. 
+                return True
+
+    # False는 모든 경우를 따져본 후에 결정된다. 재귀에서 가장 높은 차원에서 그러하고, 재귀 속에서도 그러할 것이다.
+    memo[target] = False
+    return False
+
+
+memo = defaultdict(bool)
+print(canConstruct("abcdef", ["ab","abc","cd","def","abcd"], memo))
+memo = defaultdict(bool)
+print(canConstruct("skateboard", ["bo", "rd", "ate", "t", "sks", "sk", "boar"], memo))
+memo = defaultdict(bool)
+print(canConstruct("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"], memo))
+memo = defaultdict(bool)
+print(canConstruct("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"], memo))
