@@ -118,7 +118,7 @@ memo = [[-1 for _ in range(n+1)] for _ in range(m+1)]
 
 print(gridTraveler(m, n, memo))
 
-#canSum
+#canSum: Can you do it? yes/no -> decision problem
 #메모 빈 defaultdict을 전달하는것도 상당히 편리
 from collections import defaultdict
 
@@ -147,6 +147,67 @@ print(canSum(8, [2, 3, 5], memo))
 memo = defaultdict(bool)
 print(canSum(300, [7, 14], memo))
 
-#howSum
+#howSum: how will you do it? -> combinatoric problem
+from collections import defaultdict
+
 def howSum(target, num_list, memo):
-    return 
+    if target in memo: return memo[target]
+    if target == 0: return []
+    if target < 0: return None
+
+    for num in num_list:
+        remainder = target - num
+        remainderResult = howSum(remainder, num_list, memo)
+        if remainderResult != None:
+            remainderResult.append(num)
+            memo[target] = remainderResult
+            return memo[target]
+
+    memo[target] = None
+    return memo[target]
+
+memo = defaultdict(bool)
+print(howSum(7, [2, 3], memo))
+memo = defaultdict(bool)
+print(howSum(7, [5, 3, 4, 7], memo))
+memo = defaultdict(bool)
+print(howSum(7, [2, 4], memo))
+memo = defaultdict(bool)
+print(howSum(8, [2, 3, 5], memo))
+memo = defaultdict(bool)
+print(howSum(300, [7, 14], memo))
+
+#bestSum: what is the best way to do it? -> optimization problem
+from collections import defaultdict
+
+def bestSum(target, num_list, memo):
+    if target in memo: return memo[target]
+    if target == 0: return []
+    if target <0 : return None
+
+    # 자녀 노드의 길이를 비교한 후 값을 결정한다.
+    shortestRemainderResult = None
+
+    for num in num_list:
+        remainder = target-num
+        remainderResult = bestSum(remainder, num_list, memo)
+        if remainderResult != None:
+            remainderResult.append(num)
+            if (shortestRemainderResult == None or len(remainderResult) < len(shortestRemainderResult)):
+                shortestRemainderResult = remainderResult  
+
+
+    memo[target] = shortestRemainderResult
+    return memo[target]
+
+
+memo = defaultdict(bool)
+print(bestSum(7, [2, 3], memo))
+memo = defaultdict(bool)
+print(bestSum(7, [5, 3, 4, 7], memo))
+memo = defaultdict(bool)
+print(bestSum(7, [2, 4], memo))
+memo = defaultdict(bool)
+print(bestSum(8, [2, 3, 5], memo))
+memo = defaultdict(bool)
+print(bestSum(300, [7, 14], memo))
