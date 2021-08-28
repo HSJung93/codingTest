@@ -101,6 +101,7 @@ for i in range(1, n):
 print(n-max(dp))
 
 # gridTraveler
+## top down = recursive
 # 메모가 없는 버전에서 1. 재귀 처음에서 메모 값이 없을 경우 채워 넣는다. 2. 리턴 위에서 메모 값으로 계산
 def gridTraveler(m, n, memo):
     if memo[m][n] != -1: 
@@ -118,8 +119,27 @@ memo = [[-1 for _ in range(n+1)] for _ in range(m+1)]
 
 print(gridTraveler(m, n, memo))
 
+## bottom up = Tabulation
+def gridTravelerTab(m, n):
+    table = [ [0 for _ in range(n+1)] for _ in range(m+1)]
+
+    table[1][1] = 1
+
+    for i in range(m+1):
+        for j in range(n+1):
+            cur = table[i][j]
+            if j+1<=n:
+                table [i][j+1] += cur
+            if i+1<=m:
+                table [i+1][j] += cur
+
+    return table[m][n]
+
+print(gridTravelerTab(m, n))
+
 #canSum: Can you do it? yes/no -> decision problem
-#메모 빈 defaultdict을 전달하는것도 상당히 편리
+## Recursive
+# 메모 빈 defaultdict을 전달하는것도 상당히 편리
 from collections import defaultdict
 
 def canSum(target, num_list, memo):
@@ -147,7 +167,28 @@ print(canSum(8, [2, 3, 5], memo))
 memo = defaultdict(bool)
 print(canSum(300, [7, 14], memo))
 
+## Tabulation
+def canSumTab(target, num_list ):
+    table = [False for _ in range(target+1)]
+    table[0] = True
+
+    for i in range(len(table)):
+        if table[i]:
+            for num in num_list:
+                if i + num > target:
+                    continue
+                table[i+num] = True
+        
+    return table[target]
+
+print(canSumTab(7, [2, 3] ))
+print(canSumTab(7, [5, 3, 4, 7]))
+print(canSumTab(7, [2, 4]))
+print(canSumTab(8, [2, 3, 5] ))
+print(canSumTab(300, [7, 14] ))
+
 #howSum: how will you do it? -> combinatoric problem
+## Recursive
 from collections import defaultdict
 
 def howSum(target, num_list, memo):
@@ -177,7 +218,30 @@ print(howSum(8, [2, 3, 5], memo))
 memo = defaultdict(bool)
 print(howSum(300, [7, 14], memo))
 
+## Tabulation
+def howSumTab(target, num_list ):
+    table = [None for _ in range(target+1)]
+    table[0] = []
+
+    for i in range(len(table)):
+        if table[i] is not None:
+            for num in num_list:
+                if i + num > target:
+                    continue
+                temp = [x for x in table[i]]
+                temp.append(num)
+                table[i+num] = temp
+        
+    return table[target]
+
+print(howSumTab(7, [2, 3] ))
+print(howSumTab(7, [5, 3, 4, 7]))
+print(howSumTab(7, [2, 4]))
+print(howSumTab(8, [2, 3, 5] ))
+print(howSumTab(300, [7, 14] ))
+
 #bestSum: what is the best way to do it? -> optimization problem
+## Recursive
 from collections import defaultdict
 
 def bestSum(target, num_list, memo):
@@ -212,7 +276,31 @@ print(bestSum(8, [2, 3, 5], memo))
 memo = defaultdict(bool)
 print(bestSum(300, [7, 14], memo))
 
+## Tabulation
+def bestSumTab(target, num_list ):
+    table = [None for _ in range(target+1)]
+    table[0] = []
+
+    for i in range(len(table)):
+        if table[i] is not None:
+            for num in num_list:
+                if i + num > target:
+                    continue
+                combi = [x for x in table[i]]
+                combi.append(num)
+                if table[i+num] is None or len(table[i+num]) > len(combi):
+                    table[i+num] = combi
+        
+    return table[target]
+
+print(bestSumTab(7, [2, 3]))
+print(bestSumTab(7, [5, 3, 4, 7]))
+print(bestSumTab(7, [2, 4]))
+print(bestSumTab(8, [2, 3, 5]))
+print(bestSumTab(300, [7, 14]))
+
 #canConstruct
+## Recursive
 from collections import defaultdict
 
 def canConstruct(target, wordBank, memo):
@@ -241,7 +329,26 @@ print(canConstruct("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"]
 memo = defaultdict(bool)
 print(canConstruct("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"], memo))
 
+## Tabulation
+def canConstructTab(target, wordBank ):
+    table = [False for _ in range(len(target)+1)]
+    table[0] = True
+
+    for i in range(len(table)):
+        if table[i]:
+            for word in wordBank:
+                if target[i:i+len(word)] == word:
+                    table[i+len(word)] = True
+        
+    return table[len(target)]
+
+print(canConstructTab("abcdef", ["ab","abc","cd","def","abcd"]))
+print(canConstructTab("skateboard", ["bo", "rd", "ate", "t", "sks", "sk", "boar"]))
+print(canConstructTab("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"]))
+print(canConstructTab("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"]))
+
 #countConstruct
+## Recursive
 from collections import defaultdict
 
 def countConstruct(target, wordBank, memo):
@@ -269,7 +376,26 @@ print(countConstruct("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t
 memo = defaultdict(bool)
 print(countConstruct("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"], memo))
 
+## Tabulation
+def countConstructTab(target, wordBank ):
+    table = [0 for _ in range(len(target)+1)]
+    table[0] = 1
+
+    for i in range(len(table)):
+        for word in wordBank:
+            if target[i:i+len(word)] == word:
+                table[i+len(word)] += table[i]
+        
+    return table[len(target)] 
+
+
+print(countConstructTab("abcdef", ["ab","abc","cd","def","abcd"]))
+print(countConstructTab("skateboard", ["bo", "rd", "ate", "t", "sks", "sk", "boar"]))
+print(countConstructTab("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"]))
+print(countConstructTab("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"]))
+
 #allCount
+## Recursive
 from collections import defaultdict
 
 def allConstruct(target, wordBank):
@@ -300,3 +426,30 @@ print(allConstruct("abcdef", ["ab", "abc", "cd", "def", "abcd", "ef", "c"]))
 
 print(allConstruct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"]))
 print(allConstruct("aaaaaaaaaaaaaaaaaaaz", ["a", "aa", "aaa", "aaaa", "aaaaaa"]))
+
+## Tabulation
+def allConstructTab(target, wordBank):
+    table = [[] for _ in range(len(target)+1)]
+    table[0] = [[]]
+
+    for i in range(len(table)):
+        for word in wordBank:
+            if target[i:i+len(word)] == word:
+                temp = [x + [word] for x in table[i]]
+                table[i+len(word)].extend(temp)
+
+    return table[len(target)]
+
+
+print(allConstructTab("purple", ["purp", "p", "ur", "le", "purpl"]))
+# purp le
+# p ur p le
+
+print(allConstructTab("abcdef", ["ab", "abc", "cd", "def", "abcd", "ef", "c"]))
+# ab cd df
+# ab c def
+# abc def
+# abcd ef
+
+print(allConstructTab("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"]))
+print(allConstructTab("aaaaaaaaaaaaaaaaaaaz", ["a", "aa", "aaa", "aaaa", "aaaaaa"]))
