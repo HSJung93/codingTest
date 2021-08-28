@@ -240,3 +240,63 @@ memo = defaultdict(bool)
 print(canConstruct("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"], memo))
 memo = defaultdict(bool)
 print(canConstruct("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"], memo))
+
+#countConstruct
+from collections import defaultdict
+
+def countConstruct(target, wordBank, memo):
+    if target in memo: return memo[target]
+    if target == "": return 1
+
+    totalCount = 0
+
+    for word in wordBank:
+        if target.find(word) == 0:
+            suffix = target[len(word):]
+            countRest = countConstruct(suffix, wordBank, memo)
+            totalCount += countRest
+
+    memo[target] = totalCount
+    return totalCount
+
+
+memo = defaultdict(bool)
+print(countConstruct("abcdef", ["ab","abc","cd","def","abcd"], memo))
+memo = defaultdict(bool)
+print(countConstruct("skateboard", ["bo", "rd", "ate", "t", "sks", "sk", "boar"], memo))
+memo = defaultdict(bool)
+print(countConstruct("enterapotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"], memo))
+memo = defaultdict(bool)
+print(countConstruct("eeeeeeeeeeeeeeeeeeeeef", ["e", "ee", "eee", "eeee", "eeeeee"], memo))
+
+#allCount
+from collections import defaultdict
+
+def allConstruct(target, wordBank):
+    if target == "": return [[]]
+
+    result = []
+
+    for word in wordBank:
+        if target.find(word) == 0 :
+            suffix = target[len(word):]
+            suffixWays = allConstruct(suffix, wordBank)
+            for way in suffixWays:
+                way.insert(0, word)
+            # map과 insert(리턴하는 함수가 아니라 동작하는 함수)는 어울리지 않는다!
+            result.extend(suffixWays)
+
+    return result
+
+print(allConstruct("purple", ["purp", "p", "ur", "le", "purpl"]))
+# purp le
+# p ur p le
+
+print(allConstruct("abcdef", ["ab", "abc", "cd", "def", "abcd", "ef", "c"]))
+# ab cd df
+# ab c def
+# abc def
+# abcd ef
+
+print(allConstruct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"]))
+print(allConstruct("aaaaaaaaaaaaaaaaaaaz", ["a", "aa", "aaa", "aaaa", "aaaaaa"]))
