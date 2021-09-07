@@ -1,3 +1,5 @@
+### template
+
 def is_valid_state(state):
     return True
 
