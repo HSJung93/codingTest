@@ -460,3 +460,63 @@ for i in combi:
 
         
 print(result if result != math.inf else -1)
+
+# 카카오 여름 인턴
+## graph에 여러 조건이 있는 경우
+## 거리를 재야하는 경우
+
+from collections import deque
+
+moves = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+def isIn(r,c, places):
+    return r >= 0 and r < len(places) and c >= 0 and c < len(places[0])
+
+def is_valid(r,c, place):
+    q = deque([(r,c)])
+    visited = [[False for j in range(len(place[0]))] for i in range(len(place))]
+    visited[r][c] = True
+    distance = 0
+    
+    while q:
+        # 역시 이 경우에도 큐에 넣는 층위가 존재하여 그 외부에 상수적으로 거리(시간)이 진행되는 경우
+        distance += 1
+        
+        # 상수적인 종료 조건
+        if distance > 2:
+            break
+        
+        for j in range(len(q)):
+            cr, cc = q.popleft()
+            for dr, dc in moves:
+                nr, nc = cr + dr[i], cc + dc[i]
+                if isIn(nr,nc,place) and place[nr][nc] != 'X' and visited[nr][nc] == False:
+                    visited[nr][nc] = True
+                    # 거리가 2 이하인데 다른 사람이 있으므로 조건에 부합하지 않는다
+                    if place[nr][nc] == 'P':
+                        return False
+                    q.append((nr,nc))
+                    
+    # bfs로 bool 여부를 판단해야 하는 경우
+    return True
+
+def solution(places):
+    answer = []
+    for place in places:
+        valid_flag = True
+        for i in range(len(place)):
+            for j in range(len(place[0])):
+                
+                # 'p'일 경우에 측정된 거리가 조건을 만족하는지 파악하면 된다
+                #  bool 변수를 이용하여 이중 for loop를 한번에 빠져나오는 테크닉
+                # 진입하는 이중 for문에 이중 조건문을 걸고 하나는 bfs로 둔다.
+                if place[i][j] == 'P' and is_valid(i,j,place) == False:
+                    valid_flag = False
+                    break
+            if valid_flag == False:
+                break
+        answer.append(1 if valid_flag else 0)
+    return answer
+
+
+
