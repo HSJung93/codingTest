@@ -203,8 +203,8 @@ def solution(gems):
 
     return answer
   
-  ########### DFS2 #############
-  from collections import deque
+########### DFS2 #############
+from collections import deque
 
 def solution(n, path, order):
     answer = True
